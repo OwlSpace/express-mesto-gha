@@ -15,7 +15,7 @@ const getAllUsers = (req, res) => {
 };
 
 const getOneUser = (req, res) => {
-  userModel.findById(req.params.id, { name: 1, about: 1, avatar: 1 } )
+  userModel.findById( req.params.id, { name: 1, about: 1, avatar: 1 } )
     .then((user) => {
       if (!user) {
         res.status(404).send({ message: `Такого пользователя не существует` });
