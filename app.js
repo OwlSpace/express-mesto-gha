@@ -4,7 +4,7 @@ const usersRouter = require('./routers/users');
 const cardsRouter = require('./routers/cards');
 const bodyParser = require('body-parser');
 
-const {PORT = 3000} = process.env;
+const { PORT = 3000 } = process.env;
 
 const app = express();
 
