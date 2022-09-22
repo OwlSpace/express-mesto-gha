@@ -20,11 +20,7 @@ const createNewCard = (req, res) => {
   const owner = req.user._id;
   cardModel.create({ name, link, owner })
     .then((card) => {
-      if (name.length < 2 || name.length > 30) {
-        res.status(400).send({ message: 'Не соответствует длина названия карточки' });
-      } else {
         res.status(200).send(card);
-      }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

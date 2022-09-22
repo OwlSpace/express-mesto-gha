@@ -48,11 +48,8 @@ const createNewUser = (req, res) => {
 
 const updateUserInformation = (req, res) => {
   const { name, about } = req.body;
-  userModel.findByIdAndUpdate(req.user._id, { name, about }, { returnDocument: "after" })
+  userModel.findByIdAndUpdate(req.user._id, { name, about }, { returnDocument: 'after', runValidators: true })
     .then((user) => {
-      if (name.length < 2  || about.length<2 || name.length > 30  || about.length > 30) {
-        res.status(400).send({ message: 'Не соответствует длина имени или описания' });
-      }
       res.send(user);
     })
     .catch((err) => {
@@ -66,7 +63,7 @@ const updateUserInformation = (req, res) => {
 
 const updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
-  userModel.findByIdAndUpdate(req.user._id, { avatar }, { returnDocument: "after" })
+  userModel.findByIdAndUpdate(req.user._id, { avatar }, { returnDocument: 'after' })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
