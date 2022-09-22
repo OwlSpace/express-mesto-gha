@@ -5,7 +5,6 @@ const getAllUsers = (req, res) => {
     .then((users) => {
       if (users.length === 0) {
         res.status(404).send({ message: 'Пользователи не найдены' });
-        return;
       }
       res.status(200).send(users);
     })
@@ -26,9 +25,9 @@ const getOneUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: `Передан неправельный id пользователя: ${err}` });
-        return;
+      } else {
+        res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
       }
-      res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
     });
 };
 
@@ -41,35 +40,40 @@ const createNewUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: `Некоректные данные: ${err}` });
-        return;
+      } else {
+        res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
       }
-      res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
     });
 };
 
 const updateUserInformation = (req, res) => {
   const { name, about } = req.body;
-  userModel.findByIdAndUpdate(req.user._id, { name, about })
-    .then((user) => res.send(user))
+  userModel.findByIdAndUpdate(req.user._id, { name, about }, { returnDocument: "after" })
+    .then((user) => {
+      if (name.length < 2  || about.length<2 || name.length > 30  || about.length > 30) {
+        res.status(400).send({ message: 'Не соответствует длина имени или описания' });
+      }
+      res.send(user);
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: `Некоректные данные: ${err}` });
-        return;
+      } else {
+        res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
       }
-      res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
     });
 };
 
 const updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
-  userModel.findByIdAndUpdate(req.user._id, { avatar })
+  userModel.findByIdAndUpdate(req.user._id, { avatar }, { returnDocument: "after" })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: `Некоректные данные: ${err.name}` });
-        return;
+      } else {
+        res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
       }
-      res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
     });
 };
 
