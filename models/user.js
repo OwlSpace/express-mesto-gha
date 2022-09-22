@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     minlength: 2,
     maxlength: 30,
     required: true,
-   },
+  },
   about: {
     type: String,
     minlength: 2,
@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: true,
-  }
+  },
 });
 
 module.exports = mongoose.model('user', userSchema);
