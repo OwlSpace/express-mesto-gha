@@ -38,7 +38,7 @@ const deleteCard = (req, res) => {
       if (!card) {
         res.status(404).send({ message: 'Такой карточки нет' });
       } else {
-        res.status(204).send({ message: 'Карточки отсутствуют' });
+        res.status(200).send({ message: 'Карточки отсутствуют' });
       }
     })
     .catch((err) => {
