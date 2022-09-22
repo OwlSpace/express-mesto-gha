@@ -20,7 +20,7 @@ const createNewCard = (req, res) => {
   const owner = req.user._id;
   cardModel.create({ name, link, owner })
     .then((card) => {
-        res.status(200).send(card);
+      res.status(200).send(card);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -37,7 +37,7 @@ const deleteCard = (req, res) => {
       if (!card) {
         res.status(404).send({ message: 'Такой карточки нет' });
       } else {
-        res.status(200).send({ message: 'Карточки отсутствуют' });
+        res.status(204).send({ message: 'Карточки отсутствуют' });
       }
     })
     .catch((err) => {
