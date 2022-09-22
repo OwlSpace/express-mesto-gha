@@ -7,8 +7,9 @@ const getAllCards = (req, res) => {
     .then((cards) => {
       if (cards.length === 0) {
         res.status(404).send({ message: 'Карточки отсутствуют' });
+      } else {
+        res.status(200).send(cards);
       }
-      res.status(200).send(cards);
     })
     .catch((err) => {
       res.status(500).send({ message: `Произошла ошибка на сервере: ${err}` });
