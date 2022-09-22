@@ -8,7 +8,7 @@ const getAllUsers = (req, res) => {
         return;
       }
       res.status(200).send(users);
-      })
+    })
     .catch((err) => {
       res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
     });
@@ -43,7 +43,7 @@ const createNewUser = (req, res) => {
         res.status(400).send({ message: `Некоректные данные: ${err}` });
         return;
       }
-    res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
+      res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
     });
 };
 
@@ -69,7 +69,7 @@ const updateUserAvatar = (req, res) => {
         res.status(400).send({ message: `Некоректные данные: ${err.name}` });
         return;
       }
-    res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
+      res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
     });
 };
 
