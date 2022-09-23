@@ -1,9 +1,9 @@
 const cardModel = require('../models/card');
+
 const OK = 200;
 const ERROR_CODE = 400;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
-
 
 const getAllCards = (req, res) => {
   cardModel.find({}, {
@@ -12,7 +12,7 @@ const getAllCards = (req, res) => {
     .then((cards) => {
       res.status(OK).send(cards);
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(INTERNAL_SERVER_ERROR).send({ message: 'Произошла ошибка на сервере' });
     });
 };

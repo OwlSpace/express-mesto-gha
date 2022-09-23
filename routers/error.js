@@ -1,4 +1,5 @@
 const errorRouter = require('express').Router();
+
 const NOT_FOUND = 404;
 
 errorRouter.all('/', (req, res) => {

@@ -1,16 +1,16 @@
 const userModel = require('../models/user');
+
 const OK = 200;
 const ERROR_CODE = 400;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
-
 
 const getAllUsers = (req, res) => {
   userModel.find({}, { name: 1, about: 1, avatar: 1 })
     .then((users) => {
       res.status(OK).send(users);
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(INTERNAL_SERVER_ERROR).send({ message: 'Произошла ошибка сервера' });
     });
 };
