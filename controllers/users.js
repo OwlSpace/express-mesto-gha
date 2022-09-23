@@ -1,15 +1,17 @@
 const userModel = require('../models/user');
+const OK = 200;
+const ERROR_CODE = 400;
+const NOT_FOUND = 404;
+const INTERNAL_SERVER_ERROR = 500;
+
 
 const getAllUsers = (req, res) => {
   userModel.find({}, { name: 1, about: 1, avatar: 1 })
     .then((users) => {
-      if (users.length === 0) {
-        res.status(404).send({ message: 'Пользователи не найдены' });
-      }
-      res.status(200).send(users);
+      res.status(OK).send(users);
     })
     .catch((err) => {
-      res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
+      res.status(INTERNAL_SERVER_ERROR).send({ message: 'Произошла ошибка сервера' });
     });
 };
 
@@ -17,16 +19,16 @@ const getOneUser = (req, res) => {
   userModel.findById(req.params.id, { name: 1, about: 1, avatar: 1 })
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: 'Такого пользователя не существует' });
+        res.status(NOT_FOUND).send({ message: 'Такого пользователя не существует' });
         return;
       }
-      res.status(200).send(user);
+      res.status(OK).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: `Передан неправельный id пользователя: ${err}` });
+        res.status(ERROR_CODE).send({ message: 'Передан неправельный id пользователя' });
       } else {
-        res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
+        res.status(INTERNAL_SERVER_ERROR).send({ message: 'Произошла ошибка сервера' });
       }
     });
 };
@@ -35,13 +37,13 @@ const createNewUser = (req, res) => {
   const { name, about, avatar } = req.body;
   userModel.create({ name, about, avatar })
     .then((user) => {
-      res.status(200).send(user);
+      res.status(OK).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: `Некоректные данные: ${err}` });
+        res.status(ERROR_CODE).send({ message: 'Некоректные данные' });
       } else {
-        res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
+        res.status(INTERNAL_SERVER_ERROR).send({ message: 'Произошла ошибка сервера' });
       }
     });
 };
@@ -54,22 +56,22 @@ const updateUserInformation = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: `Некоректные данные: ${err}` });
+        res.status(ERROR_CODE).send({ message: 'Некоректные данные' });
       } else {
-        res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
+        res.status(INTERNAL_SERVER_ERROR).send({ message: 'Произошла ошибка сервера' });
       }
     });
 };
 
 const updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
-  userModel.findByIdAndUpdate(req.user._id, { avatar }, { returnDocument: 'after' })
+  userModel.findByIdAndUpdate(req.user._id, { avatar }, { returnDocument: 'after', runValidators: true })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: `Некоректные данные: ${err.name}` });
+        res.status(ERROR_CODE).send({ message: 'Некоректные данные' });
       } else {
-        res.status(500).send({ message: `Произошла ошибка сервера:  ${err}` });
+        res.status(INTERNAL_SERVER_ERROR).send({ message: 'Произошла ошибка сервера' });
       }
     });
 };
