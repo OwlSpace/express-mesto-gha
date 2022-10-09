@@ -5,7 +5,7 @@ module.exports = (err, req, res, next) => {
   res.status(statusCode).send(
     {
       message: statusCode === INTERNAL_SERVER_ERROR
-      ? `err.name = ${err.name} ; err.massage = ${err.message}` : message
+        ? `err.name = ${err.name} ; err.massage = ${err.message}` : message,
     },
   );
   return next();
