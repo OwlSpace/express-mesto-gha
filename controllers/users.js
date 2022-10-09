@@ -1,7 +1,7 @@
+const jwt = require('jsonwebtoken');
 const userModel = require('../models/user');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { OK, SEKRET_KEY } = require('../constants');
+const { OK, SEKRET_KEY, saltRound } = require('../constants');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
 const NotFoundError = require('../errors/NotFoundError');
@@ -32,26 +32,30 @@ const getOneUser = (req, res, next) => {
 };
 
 const createNewUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name, about, avatar, email, password
+  } = req.body;
 
   bcrypt.hash(password, saltRound)
-    .then((hash) => userModel.create({ name, about, avatar, email, password: hash })
-    .then((user) => {
-      res.status(OK).send({
-        name: user.name,
-        about: user.about,
-        avatar: user.avatar,
-        email: user.email,
-      });
+    .then((hash) => userModel.create({
+      name, about, avatar, email, password: hash
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Некоректные данные'));
-      } else if (err.code === 11000) {
-        return next(new ConflictError('Пользователь с таким email-адресом уже существует'));
-      }
-      return next(err);
-    }));
+      .then((user) => {
+        res.status(OK).send({
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          email: user.email,
+        });
+      })
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          return next(new BadRequestError('Некоректные данные'));
+        } else if (err.code === 11000) {
+          return next(new ConflictError('Пользователь с таким email-адресом уже существует'));
+        }
+        return next(err);
+      }));
 };
 
 const updateUserInformation = (req, res, next) => {
@@ -81,7 +85,7 @@ const updateUserAvatar = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
-  const  { email, password } = req.body;
+  const { email, password } = req.body;
 
   return userModel.findUserByCredentials(email, password)
     .then((user) => {

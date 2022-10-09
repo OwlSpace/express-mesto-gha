@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { bcrypt } = require('bcryptjs');
-const isEmaill = require('validator/lib/isEmaill');
+const isEmaill = require('validator/lib/isEmail');
 const { LINK_VALID } = require('../constants');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
@@ -49,8 +49,8 @@ userSchema.static.findUserByCredentials = function (email, password) {
       }
       return bcrypt.compare(password, user.password)
         .then((matches) => {
-          if (!matches){
-            return Promise.reject(new UnauthorizedError('Неправильные почта или пароль'))
+          if (!matches) {
+            return Promise.reject(new UnauthorizedError('Неправильные почта или пароль'));
           }
           return user;
         });

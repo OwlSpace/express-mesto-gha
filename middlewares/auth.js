@@ -20,4 +20,4 @@ module.exports = (req, res, next) => {
 
   res.user = payload;
   return next();
-}
+};

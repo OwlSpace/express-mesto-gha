@@ -41,7 +41,7 @@ const deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Передан неправельный id карточки'))
+        return next(new BadRequestError('Передан неправельный id карточки'));
       }
       return next(err);
     });

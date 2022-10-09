@@ -10,7 +10,7 @@ const {
   createNewUser,
 } = require('./controllers/users');
 const auth = require('./middlewares/auth');
-const center_error = require('./middlewares/center_error');
+const centerError = require('./middlewares/center_error');
 const { LINK_VALID } = require('./constants');
 
 const { PORT = 3000 } = process.env;
@@ -36,7 +36,7 @@ app.post('/signup', celebrate({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().custom((v) => LINK_VALID.test(v)),
-  })
+  }),
 }), createNewUser);
 
 app.use(auth);
@@ -46,7 +46,7 @@ app.use('/cards', cardsRouter);
 app.use('*', errorRouter);
 
 app.use(errors());
-app.use(center_error);
+app.use(centerError);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
