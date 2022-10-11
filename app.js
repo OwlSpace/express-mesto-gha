@@ -25,7 +25,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 });
 
-
 app.use(bodyParser.json());
 
 app.post('/signin', celebrate({

@@ -40,23 +40,23 @@ const createNewUser = (req, res, next) => {
     .then((hash) => userModel.create({
       name, about, avatar, email, password: hash,
     }))
-      .then((user) => {
-        res.status(OK).send({
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          email: user.email,
-        });
-      })
-      .catch((err) => {
-        if (err.name === 'ValidationError') {
-          return next(new BadRequestError('Некоректные данные'));
-        }
-        if (err.code === 11000) {
-          return next(new ConflictError('Пользователь с таким email-адресом уже существует'));
-        }
-        return next(err);
+    .then((user) => {
+      res.status(OK).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
       });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return next(new BadRequestError('Некоректные данные'));
+      }
+      if (err.code === 11000) {
+        return next(new ConflictError('Пользователь с таким email-адресом уже существует'));
+      }
+      return next(err);
+    });
 };
 
 const updateUserInformation = (req, res, next) => {
@@ -91,7 +91,7 @@ const login = (req, res, next) => {
   return userModel.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, SEKRET_KEY, { expiresIn: '7d' });
-      res.cookie('authorization',token, {
+      res.cookie('authorization', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
       });
