@@ -36,10 +36,10 @@ const createNewUser = (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  bcrypt.hash(password, saltRound)
+  return bcrypt.hash(password, saltRound)
     .then((hash) => userModel.create({
       name, about, avatar, email, password: hash,
-    })
+    }))
       .then((user) => {
         res.status(OK).send({
           name: user.name,
@@ -56,7 +56,7 @@ const createNewUser = (req, res, next) => {
           return next(new ConflictError('Пользователь с таким email-адресом уже существует'));
         }
         return next(err);
-      }));
+      });
 };
 
 const updateUserInformation = (req, res, next) => {
@@ -91,6 +91,10 @@ const login = (req, res, next) => {
   return userModel.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, SEKRET_KEY, { expiresIn: '7d' });
+      res.cookie('authorization',token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+      });
       res.send({ token });
     })
     .catch(() => {
