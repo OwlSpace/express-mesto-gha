@@ -9,7 +9,7 @@ const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const getAllUsers = (req, res, next) => {
   userModel.find({}, {
-    _id: 1, name: 1, about: 1, avatar: 1, email: 1
+    _id: 1, name: 1, about: 1, avatar: 1, email: 1,
   })
     .then((users) => {
       res.status(OK).send(users);
