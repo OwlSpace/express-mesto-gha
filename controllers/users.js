@@ -103,12 +103,19 @@ const login = (req, res, next) => {
 };
 
 const getInfoUser = (req, res, next) => {
-  userModel.findById(req.user._id)
+  console.log(req.res.user._id );
+  userModel.findById(req.res.user._id)
     .then((user) => {
+
       if (!user) {
         return next(new NotFoundError('Пользователь не найден'));
       }
-      return res.status(OK).send(user);
+      return res.status(OK).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+      });
     })
     .catch((err) => next(err));
 };

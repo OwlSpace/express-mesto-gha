@@ -16,7 +16,8 @@ const getAllCards = (req, res, next) => {
 
 const createNewCard = (req, res, next) => {
   const { name, link } = req.body;
-  const owner = req.user._id;
+  const owner = req.res.user._id;
+  console.log(req.res.user);
   cardModel.create({ name, link, owner })
     .then((card) => {
       res.status(OK).send(card);
@@ -49,7 +50,7 @@ const deleteCard = (req, res, next) => {
 
 const addLike = (req, res, next) => {
   cardModel.findByIdAndUpdate(req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
+    { $addToSet: { likes: req.res.user._id } },
     { new: true })
     .then((card) => {
       if (!card) {
@@ -68,7 +69,7 @@ const addLike = (req, res, next) => {
 
 const deleteLike = (req, res, next) => {
   cardModel.findByIdAndUpdate(req.params.cardId,
-    { $pull: { likes: req.user._id } },
+    { $pull: { likes: req.res.user._id } },
     { new: true })
     .then((card) => {
       if (!card) {
