@@ -34,8 +34,8 @@ const deleteCard = (req, res, next) => {
   cardModel.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) {
-        throw new ForbiddenError('Такой карточки нет');
-      } else if (!card.owner.equals(req.user._id)) {
+        throw new NotFoundError('Такой карточки нет');
+      } else if (!card.owner.equals(req.res.user._id)) {
         throw new ForbiddenError('Нельзя удалить не свою карточку');
       }
       return card.remove().then(() => res.status(OK).send(card));

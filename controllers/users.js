@@ -61,7 +61,7 @@ const createNewUser = (req, res, next) => {
 
 const updateUserInformation = (req, res, next) => {
   const { name, about } = req.body;
-  userModel.findByIdAndUpdate(req.user._id, { name, about }, { returnDocument: 'after', runValidators: true })
+  userModel.findByIdAndUpdate(req.res.user._id, { name, about }, { returnDocument: 'after', runValidators: true })
     .then((user) => {
       res.send(user);
     })
@@ -75,7 +75,7 @@ const updateUserInformation = (req, res, next) => {
 
 const updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  userModel.findByIdAndUpdate(req.user._id, { avatar }, { returnDocument: 'after', runValidators: true })
+  userModel.findByIdAndUpdate(req.res.user._id, { avatar }, { returnDocument: 'after', runValidators: true })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -103,10 +103,8 @@ const login = (req, res, next) => {
 };
 
 const getInfoUser = (req, res, next) => {
-  console.log(req.res.user._id );
   userModel.findById(req.res.user._id)
     .then((user) => {
-
       if (!user) {
         return next(new NotFoundError('Пользователь не найден'));
       }
