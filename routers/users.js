@@ -31,7 +31,7 @@ usersRouter.patch('/me/avatar', celebrate({
       }
       return helpers.message('Некорректная ссылка');
     }),
-  })
+  }),
 }), updateUserAvatar);
 
 module.exports = usersRouter;

@@ -8,7 +8,7 @@ const NotFoundError = require('../errors/NotFoundError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const getAllUsers = (req, res, next) => {
-  userModel.find({}, { name: 1, about: 1, avatar: 1 })
+  userModel.find({}, { _id: 1, name: 1, about: 1, avatar: 1, email:1 })
     .then((users) => {
       res.status(OK).send(users);
     })
@@ -63,7 +63,12 @@ const updateUserInformation = (req, res, next) => {
   const { name, about } = req.body;
   userModel.findByIdAndUpdate(req.res.user._id, { name, about }, { returnDocument: 'after', runValidators: true })
     .then((user) => {
-      res.send(user);
+      res.send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+      });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -76,7 +81,12 @@ const updateUserInformation = (req, res, next) => {
 const updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   userModel.findByIdAndUpdate(req.res.user._id, { avatar }, { returnDocument: 'after', runValidators: true })
-    .then((user) => res.send(user))
+    .then((user) => res.send({
+      name: user.name,
+      about: user.about,
+      avatar: user.avatar,
+      email: user.email,
+    }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Некоректные данные'));

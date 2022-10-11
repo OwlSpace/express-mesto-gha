@@ -13,14 +13,14 @@ const {
 cardsRouter.get('/', getAllCards);
 cardsRouter.post('/', celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    link: Joi.string().min(2).custom((value, helpers) => {
+    name: Joi.string().required().min(2).max(30),
+    link: Joi.string().required().min(2).custom((value, helpers) => {
       if (LINK_VALID.test(value)) {
         return value;
       }
       return helpers.message('Некорректная ссылка');
     }),
-  })
+  }),
 }), createNewCard);
 cardsRouter.delete('/:cardId', celebrate({
   params: Joi.object().keys({
