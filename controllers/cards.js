@@ -17,7 +17,6 @@ const getAllCards = (req, res, next) => {
 const createNewCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.res.user._id;
-  console.log(req.res.user);
   cardModel.create({ name, link, owner })
     .then((card) => {
       res.status(OK).send(card);
@@ -31,7 +30,7 @@ const createNewCard = (req, res, next) => {
 };
 
 const deleteCard = (req, res, next) => {
-  cardModel.findByIdAndRemove(req.params.cardId)
+  cardModel.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Такой карточки нет');

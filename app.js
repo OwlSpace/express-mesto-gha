@@ -35,7 +35,7 @@ app.post('/signin', celebrate({
       }
       return helpers.message('Некорректный email');
     }),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required(),
   }),
 }), login);
 app.post('/signup', celebrate({
@@ -46,7 +46,7 @@ app.post('/signup', celebrate({
       }
       return helpers.message('Некорректный email');
     }),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().custom((value, helpers) => {
